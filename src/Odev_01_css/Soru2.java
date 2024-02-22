@@ -1,4 +1,4 @@
-package Odev_01;
+package Odev_01_css;
 
 import Utlity.BaseDriver;
 import Utlity.MyFunc;
