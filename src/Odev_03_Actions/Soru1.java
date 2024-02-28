@@ -21,17 +21,26 @@ public class Soru1 extends BaseDriver {
         List<WebElement> ulkeler = driver.findElements(By.cssSelector("div[id='questionDiv'] [class='destinationBox']"));
 
         Actions aksiyondriver = new Actions(driver);
-
-        for (int i = 0; i < sehirler.size(); i++) {
-            Action aksiyon = aksiyondriver.clickAndHold(sehirler.get(i)).build();
-            MyFunc.Bekle(5);
+        for (WebElement sehir:sehirler) {
+            MyFunc.Bekle(1);
+            aksiyondriver.clickAndHold(sehir).build().perform();
             for (WebElement ulke : ulkeler) {
-                // MyFunc.Bekle(5);
-                String color = ulke.getCssValue("background-color");
-                if (color.contains("green")) {
+                //  String color = ulke.getCssValue("background-color");
+                if (ulke.getCssValue("background-color").contains("green")) {
                     // MyFunc.Bekle(5);
                     aksiyondriver.moveToElement(ulke).release().build().perform();
+                    System.out.println("Basarili");
                 }
+                // MyFunc.Bekle(5);
+
+                //for (WebElement sehir : sehirler) {
+                //    for (WebElement ulke : ulkeler) {
+                //        String ulkeRenk = ulke.getCssValue("background-color");
+                //        if (ulkeRenk.contains("rgba(0, 128, 0, 1)")) { // Eğer ülke kutusu boşsa ve yeşil renkteyse
+                //            aksiyondriver.clickAndHold(sehir).moveToElement(ulke).release().build().perform();
+                //            break; // Doğru ülkeyi bulduğumuzda döngüyü sonlandır
+                //        }
+
             }
         }
     }
