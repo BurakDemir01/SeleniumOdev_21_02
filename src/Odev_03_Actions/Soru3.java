@@ -9,12 +9,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.List;
 
 public class Soru3 extends BaseDriver {
+    //challenge sorusu
+    //Ödev 3: http://dhtmlgoodies.com/scripts/drag-drop-nodes-quiz/drag-drop-nodes-quiz.html
+    //         buradaki bütün şehirleri bütün ülkelere doğru şekilde topluca dağıtınız.
+
     @Test
     public void Senaryo3() {
 
@@ -22,7 +24,7 @@ public class Soru3 extends BaseDriver {
 
         List<WebElement> cities = driver.findElements(By.xpath("//div[@id='dhtmlgoodies_dragDropContainer']//li"));
         List<WebElement> countries = driver.findElements(By.xpath("//div[@id='dhtmlgoodies_mainContainer']//ul"));
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
         wait.until(ExpectedConditions.visibilityOfAllElements(cities));
 
         for (WebElement country : countries) {
@@ -34,24 +36,24 @@ public class Soru3 extends BaseDriver {
                 } catch (NoAlertPresentException e) {
 
                 }
+
                 String boxId = country.getAttribute("id");
                 if (city.getAttribute("groupid").equals(boxId)) {
                     Actions driverAksiyon = new Actions(driver);
-                    Action aksiyon = driverAksiyon.clickAndHold(city).build();
 
+                    Action aksiyon = driverAksiyon.clickAndHold(city).build();
                     aksiyon.perform();
+
                     wait.until(ExpectedConditions.visibilityOfAllElements(countries));
 
                     aksiyon = driverAksiyon.moveToElement(country).release().build();
-                    wait.until(ExpectedConditions.visibilityOfAllElements(countries));
-                    aksiyon.perform();
 
+                    wait.until(ExpectedConditions.visibilityOfAllElements(countries));
+
+                    aksiyon.perform();
                 }
             }
-
         }
-
         BekleKapat();
-
     }
 }

@@ -7,41 +7,36 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 public class Soru1 extends BaseDriver {
     @Test
     public void Test1() {
-        // Ödev 1 : http://dhtmlgoodies.com/scripts/drag-drop-quiz/drag-drop-quiz-d2.html
-        // buradaki ülke ve şehirleri findElements ile topluca bularak bir döngü ile bütün şehirleri doğru ülkere dağıtınız.
-
+        // Web sayfasını açma
         driver.get("http://dhtmlgoodies.com/scripts/drag-drop-quiz/drag-drop-quiz-d2.html");
-        List<WebElement> sehirler = driver.findElements(By.cssSelector("[id='answerDiv'] div"));
-        List<WebElement> ulkeler = driver.findElements(By.cssSelector("div[id='questionDiv'] [class='destinationBox']"));
+        MyFunc.Bekle(2);
 
-        Actions aksiyondriver = new Actions(driver);
-        for (WebElement sehir:sehirler) {
-            MyFunc.Bekle(1);
-            aksiyondriver.clickAndHold(sehir).build().perform();
+        List<WebElement> sehirler = driver.findElements(By.xpath("//div[@class='dragDropSmallBox' and starts-with(@id,'a')]"));
+        List<WebElement> ulkeler = driver.findElements(By.xpath("//div[@class='dragDropSmallBox' and starts-with(@id,'q')]"));
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='dragDropSmallBox' and starts-with(@id,'a')]")));
+        for (WebElement sehir : sehirler) {
+            Actions actions = new Actions(driver);
+            Action action = actions.clickAndHold(sehir).build();
+            action.perform();
+            wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='dragDropSmallBox' and starts-with(@id,'q')]")));
             for (WebElement ulke : ulkeler) {
-                //  String color = ulke.getCssValue("background-color");
-                if (ulke.getCssValue("background-color").contains("green")) {
-                    // MyFunc.Bekle(5);
-                    aksiyondriver.moveToElement(ulke).release().build().perform();
-                    System.out.println("Basarili");
+                if (sehir.getAttribute("id").substring(1).equals(ulke.getAttribute("id").substring(1))) {
+                    action = actions.moveToElement(ulke).release().build();
+                    action.perform();
                 }
-                // MyFunc.Bekle(5);
-
-                //for (WebElement sehir : sehirler) {
-                //    for (WebElement ulke : ulkeler) {
-                //        String ulkeRenk = ulke.getCssValue("background-color");
-                //        if (ulkeRenk.contains("rgba(0, 128, 0, 1)")) { // Eğer ülke kutusu boşsa ve yeşil renkteyse
-                //            aksiyondriver.clickAndHold(sehir).moveToElement(ulke).release().build().perform();
-                //            break; // Doğru ülkeyi bulduğumuzda döngüyü sonlandır
-                //        }
-
             }
         }
     }
 }
+
